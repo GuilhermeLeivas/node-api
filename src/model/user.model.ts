@@ -31,7 +31,7 @@ const userSchema = new mongoose
 
 userSchema.pre("save", async function (next: any) {
     let user = this as UserDocument;
-    
+
 });
 
 const User = mongoose.model("User", userSchema);
