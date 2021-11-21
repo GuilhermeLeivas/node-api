@@ -1,3 +1,4 @@
+import { UserDocument } from "@model/user.model";
 import bcrypt from "bcrypt";
 import config from "config";
 
@@ -11,5 +12,22 @@ const passwordCryptor = async (password: string): Promise<string> => {
     const hash = bcrypt.hashSync(password, salt);
     return hash;
 }
+/**
+ * Compares two encrypted passwords
+ * @param canditadePassword Password to be compare with user password
+ * @param user User in database
+ * @returns If password are equal
+ */
+const compareEncryptedPassword = async function (canditadePassword: string,
+    user: UserDocument): Promise<Boolean> {
+    return await bcrypt
+        .compare(canditadePassword, user.password)
+        .catch((ex) => false);
+}
 
-export default passwordCryptor;
+const bcryptUtil = {
+    passwordCryptor,
+    compareEncryptedPassword
+}
+
+export default bcryptUtil;

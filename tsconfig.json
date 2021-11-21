@@ -4,7 +4,8 @@
       "@model/*": ["src/model/*"],
       "@middleware/*": ["src/middleware/*"],
       "@utils/*": ["src/utils/*"],
-      "@config/*": ["src/config/*"]
+      "@config/*": ["src/config/*"],
+      "@resource":["src/resource/*"]
     },
     "outDir": "build",
     /* Projects */

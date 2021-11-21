@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import passwordCryptor from "@utils/bcryptUtil";
+import bcryptUtil from "@utils/bcryptUtil";
 
 /**
  * Represents the user ts interface.
@@ -9,7 +9,8 @@ export interface UserDocument extends mongoose.Document {
     name: string,
     password: string,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    comparePassword(canditadePassword: string): Promise<Boolean>
 }
 
 /**
@@ -37,8 +38,13 @@ userSchema.pre("save", async function (next: any) {
     if (!user.isModified('password')) {
         return next();
     }
-    user.password = await passwordCryptor(user.password);
+    user.password = await bcryptUtil.passwordCryptor(user.password);
 });
+
+userSchema.methods.comparePassword = async function (canditadePassword: string): Promise<Boolean> {
+    const user = this as UserDocument;
+    return await bcryptUtil.compareEncryptedPassword(canditadePassword, user);
+}
 
 const User = mongoose.model("User", userSchema);
 
