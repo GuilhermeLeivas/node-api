@@ -29,7 +29,7 @@ const userSchema = new mongoose
             timestamps: true
         });
 
-/**This is triggred right before every save on an user document. 
+/**This function is triggred right before every save on an user document. 
  * Here, we are using to keep track every time a user changes his
  * password so we can encrypt it for safety.
 */
@@ -41,6 +41,12 @@ userSchema.pre("save", async function (next: any) {
     user.password = await bcryptUtil.passwordCryptor(user.password);
 });
 
+/**
+ * This function is used every time we want to compare a
+ * arbitrary password with an user password.
+ * @param canditadePassword Password to compare with user password 
+ * @returns If user password equals candidatePasswor
+ */
 userSchema.methods.comparePassword = async function (canditadePassword: string): Promise<Boolean> {
     const user = this as UserDocument;
     return await bcryptUtil.compareEncryptedPassword(canditadePassword, user);
